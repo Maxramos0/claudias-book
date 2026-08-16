@@ -60,6 +60,25 @@ function LangToggle() {
   );
 }
 
+const FLIP_MS = 680;
+const RIFFLE_MS = 88;
+
+type FlipApi = NonNullable<ReturnType<HTMLFlipBook["pageFlip"]>>;
+
+function armClicks(api: FlipApi, fast: boolean) {
+  const s = api.getSettings?.();
+  if (!s) return;
+  s.disableFlipByClick = false;
+  s.flippingTime = fast ? RIFFLE_MS : FLIP_MS;
+}
+
+function lockClicks(api: FlipApi) {
+  const s = api.getSettings?.();
+  if (!s) return;
+  s.disableFlipByClick = true;
+  s.flippingTime = FLIP_MS;
+}
+
 function renderPage(p: (typeof PAGES)[number], i: number) {
   switch (p.kind) {
     case "cover-front":
@@ -88,19 +107,91 @@ function renderPage(p: (typeof PAGES)[number], i: number) {
 export function BookInner() {
   const bookRef = useRef<HTMLFlipBook>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const jumpTarget = useRef<number | null>(null);
+  const jumpDir = useRef<"fwd" | "back" | null>(null);
   const [page, setPage] = useState(0);
+  const [riffle, setRiffle] = useState(false);
   const { locale, t } = useLocale();
+
+  const stopRiffle = useCallback((api?: FlipApi | null) => {
+    jumpTarget.current = null;
+    jumpDir.current = null;
+    setRiffle(false);
+    if (api) lockClicks(api);
+  }, []);
+
+  const stepToward = useCallback((api: FlipApi, target: number) => {
+    const current = api.getCurrentPageIndex();
+    if (current === target) {
+      stopRiffle(api);
+      return;
+    }
+    armClicks(api, true);
+    if (current < target) api.flipNext();
+    else api.flipPrev();
+  }, [stopRiffle]);
 
   const flip = useCallback((dir: "prev" | "next") => {
     const api = bookRef.current?.pageFlip();
-    if (!api) return;
+    if (!api || jumpTarget.current != null) return;
+    armClicks(api, false);
     if (dir === "prev") api.flipPrev();
     else api.flipNext();
+    queueMicrotask(() => lockClicks(api));
   }, []);
 
-  const goTo = useCallback((i: number) => {
-    bookRef.current?.pageFlip()?.flip(i);
+  const goTo = useCallback(
+    (target: number) => {
+      const api = bookRef.current?.pageFlip();
+      if (!api) return;
+      const current = api.getCurrentPageIndex();
+      if (target < 0 || target === current) return;
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        api.turnToPage(target);
+        setPage(target);
+        return;
+      }
+
+      const already = jumpTarget.current != null;
+      jumpTarget.current = target;
+      jumpDir.current = target > current ? "fwd" : "back";
+      setRiffle(true);
+      if (!already) stepToward(api, target);
+    },
+    [stepToward],
+  );
+
+  const onFlip = useCallback((e: { data: number }) => {
+    setPage(e.data);
   }, []);
+
+  const onChangeState = useCallback(
+    (e: { data: "user_fold" | "fold_corner" | "flipping" | "read" }) => {
+      if (e.data !== "read") return;
+      const target = jumpTarget.current;
+      if (target == null) return;
+      const api = bookRef.current?.pageFlip();
+      if (!api) return;
+
+      const current = api.getCurrentPageIndex();
+      const arrived =
+        current === target ||
+        (jumpDir.current === "fwd" && current >= target) ||
+        (jumpDir.current === "back" && current <= target);
+
+      if (arrived) {
+        if (current !== target) {
+          api.turnToPage(target);
+          setPage(target);
+        }
+        stopRiffle(api);
+        return;
+      }
+      stepToward(api, target);
+    },
+    [stepToward, stopRiffle],
+  );
 
   useEffect(() => {
     const root = wrapRef.current;
@@ -147,6 +238,24 @@ export function BookInner() {
     return () => window.removeEventListener("keydown", onKey);
   }, [flip, goTo]);
 
+  useEffect(() => {
+    stopRiffle(bookRef.current?.pageFlip());
+  }, [locale, stopRiffle]);
+
+  useEffect(() => {
+    if (!riffle) return;
+    const id = window.setTimeout(() => {
+      const api = bookRef.current?.pageFlip();
+      const target = jumpTarget.current;
+      if (api && target != null) {
+        api.turnToPage(target);
+        setPage(target);
+      }
+      stopRiffle(api);
+    }, 9000);
+    return () => window.clearTimeout(id);
+  }, [riffle, stopRiffle]);
+
   const current = labelFor(PAGES[page] ?? PAGES[0], locale);
   const progress = (page / (PAGES.length - 1)) * 100;
 
@@ -190,7 +299,7 @@ export function BookInner() {
       </header>
 
       <div className="book-scene">
-        <div className="book-wrap" ref={wrapRef}>
+        <div className="book-wrap" ref={wrapRef} data-riffle={riffle || undefined}>
           <HTMLFlipBook
             ref={bookRef}
             key={locale}
@@ -206,7 +315,7 @@ export function BookInner() {
             maxHeight={900}
             drawShadow
             showCover
-            flippingTime={680}
+            flippingTime={FLIP_MS}
             usePortrait
             startZIndex={3}
             maxShadowOpacity={0.2}
@@ -216,7 +325,8 @@ export function BookInner() {
             disableFlipByClick
             mobileScrollSupport
             className="the-book"
-            onFlip={(e) => setPage(e.data)}
+            onFlip={onFlip}
+            onChangeState={onChangeState}
           >
             {PAGES.map(renderPage)}
           </HTMLFlipBook>
@@ -224,7 +334,7 @@ export function BookInner() {
         </div>
       </div>
 
-      <nav className="controls" aria-label={t.nav}>
+      <nav className="controls" aria-label={t.nav} data-riffle={riffle || undefined} aria-busy={riffle}>
         <button
           type="button"
           className="nav-btn"

@@ -1536,6 +1536,10 @@ html.is-touch .masthead kbd {
   animation: fade-up 0.7s var(--ease) 0.18s both;
 }
 
+.book-wrap[data-riffle="true"] {
+  pointer-events: none;
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;

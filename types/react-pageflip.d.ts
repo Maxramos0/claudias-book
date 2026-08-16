@@ -26,6 +26,7 @@ declare module "react-pageflip" {
     style?: CSSProperties;
     startPage?: number;
     onFlip?: (e: { data: number }) => void;
+    onChangeState?: (e: { data: "user_fold" | "fold_corner" | "flipping" | "read" }) => void;
     children?: ReactNode;
   }
 
@@ -38,6 +39,8 @@ declare module "react-pageflip" {
     turnToPage(page: number): void;
     getCurrentPageIndex(): number;
     getPageCount(): number;
+    getState(): "user_fold" | "fold_corner" | "flipping" | "read";
+    getSettings(): { disableFlipByClick: boolean; flippingTime: number };
   }
 
   export default class HTMLFlipBook extends Component<HTMLFlipBookProps> {

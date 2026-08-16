@@ -1,3 +1,5 @@
+import { COPY } from "./copy";
+import { localizeMeal, localizeRecipe, type Locale } from "./localize";
 import {
   MEAL_CARDS,
   SECTIONS,
@@ -66,35 +68,41 @@ export const PAGE_OF: Record<string, number> = Object.fromEntries(
   PAGES.flatMap((p, i) => (p.kind === "recipe" ? [[p.recipe.id, i + 1]] : [])),
 );
 
-export function labelFor(p: PageDesc): { title: string; section: string } {
+export function labelFor(
+  p: PageDesc,
+  locale: Locale = "en",
+): { title: string; section: string } {
+  const t = COPY[locale];
   switch (p.kind) {
     case "cover-front":
-      return { title: "Claudia's Recipes", section: "Cover" };
+      return { title: "Claudia's Recipes", section: t.cover };
     case "endpaper":
-      return { title: "For the kitchen", section: "Opening" };
+      return { title: t.endpaperTitle, section: t.opening };
     case "dedication":
-      return { title: "A little gift", section: "Dedication" };
+      return { title: t.dedicationTitle, section: t.dedicationSec };
     case "watercolor":
-      return { title: "Something sweet", section: "Opening" };
+      return { title: t.somethingSweet.replace("\n", " "), section: t.opening };
     case "contents":
-      return { title: "What's inside", section: `Contents ${p.half + 1}/2` };
+      return { title: t.whatsInside, section: `${t.contents} ${p.half + 1}/2` };
     case "divider": {
-      const s = SECTIONS.find((x) => x.id === p.section)!;
+      const s = t.sections[p.section];
       return { title: s.title, section: s.kicker };
     }
     case "recipe": {
-      const s = SECTIONS.find((x) => x.id === p.recipe.section)!;
-      return { title: p.recipe.title, section: s.title };
+      const r = localizeRecipe(p.recipe, locale);
+      return { title: r.title, section: t.sections[r.section].title };
     }
     case "menu-divider":
-      return { title: "Weekly menus", section: "Chapter six" };
+      return { title: t.weeklyMenus, section: t.chapterSix };
     case "meal-cards":
       return {
-        title: p.cards.map((c) => `${c.kind} #${c.number}`).join(" · "),
-        section: "Menus",
+        title: p.cards
+          .map((c) => `${t.mealKind[localizeMeal(c, locale).kind]} #${c.number}`)
+          .join(" · "),
+        section: t.menus,
       };
     case "cover-back":
-      return { title: "Thank you", section: "The end" };
+      return { title: t.thankYou, section: t.theEnd };
   }
 }
 

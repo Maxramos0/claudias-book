@@ -4,6 +4,8 @@ import { forwardRef, type CSSProperties, type ReactNode } from "react";
 import { Icon } from "./Icons";
 import { Scribble, Sticky } from "./Notes";
 import { PAGE_OF } from "@/data/book";
+import { localizeMeal, localizeRecipe } from "@/data/localize";
+import { useLocale } from "@/lib/locale";
 import {
   MEAL_CARDS,
   RECIPES,
@@ -85,6 +87,7 @@ const TAB_TONE: Record<SectionId, string> = {
 /* ─────────────────────────── portada ─────────────────────────── */
 
 export const CoverFront = forwardRef<HTMLDivElement>(function CoverFront(_, ref) {
+  const { t } = useLocale();
   return (
     <Sheet ref={ref} density="hard">
       <div
@@ -102,7 +105,7 @@ export const CoverFront = forwardRef<HTMLDivElement>(function CoverFront(_, ref)
         }}
       >
         <p className="eyebrow" style={{ letterSpacing: "0.42em" }}>
-          A book from home
+          {t.coverKicker}
         </p>
 
         <h1 className="script" style={{ fontSize: "var(--t-h1)", marginTop: 14 }}>
@@ -119,13 +122,13 @@ export const CoverFront = forwardRef<HTMLDivElement>(function CoverFront(_, ref)
             fontWeight: 500,
           }}
         >
-          RECIPES
+          {t.recipesWord}
         </p>
 
         <div className="drip" style={{ width: "62%", marginTop: 24 }} />
 
         <p className="hand" style={{ fontSize: 18, marginTop: 20, color: "var(--wine)" }}>
-          {RECIPES.length} recipes, copied by hand
+          {t.recipesCount(RECIPES.length)}
         </p>
       </div>
     </Sheet>
@@ -135,6 +138,7 @@ export const CoverFront = forwardRef<HTMLDivElement>(function CoverFront(_, ref)
 /* ─────────────────────────── guardas ─────────────────────────── */
 
 export const Endpaper = forwardRef<HTMLDivElement>(function Endpaper(_, ref) {
+  const { t } = useLocale();
   return (
     <Sheet ref={ref}>
       <div
@@ -154,10 +158,10 @@ export const Endpaper = forwardRef<HTMLDivElement>(function Endpaper(_, ref) {
       >
         <div className="grow" />
         <p className="script" style={{ fontSize: "clamp(28px, 4.4vw, 46px)" }}>
-          For the kitchen
+          {t.endpaperTitle}
         </p>
         <p className="body" style={{ maxWidth: "30ch" }}>
-          Copied from the notebook as they were written — flour stains and all.
+          {t.endpaperBody}
         </p>
         <div className="drip" style={{ width: "44%", marginTop: 4 }} />
       </div>
@@ -165,24 +169,22 @@ export const Endpaper = forwardRef<HTMLDivElement>(function Endpaper(_, ref) {
   );
 });
 
-const DEDICATION =
-  "Thank you for filling my days with love, unforgettable moments, and so many reasons to smile. This little gift was made with the same love with which you fill my life. I hope you enjoy every recipe as much as I enjoy sharing this life with you.";
-
 export const Dedication = forwardRef<HTMLDivElement>(function Dedication(_, ref) {
+  const { t } = useLocale();
   return (
     <Sheet ref={ref} className="paper">
       <div className="inner reveal dedication">
-        <p className="eyebrow">For Claudia</p>
+        <p className="eyebrow">{t.dedicationEyebrow}</p>
         <h2
           className="script"
           style={{ fontSize: "clamp(32px, 4.6vw, 48px)", margin: "8px 0 14px" }}
         >
-          A little gift
+          {t.dedicationTitle}
         </h2>
         <div className="drip" style={{ width: "58%", marginBottom: 18 }} />
-        <p className="dedication-text">{DEDICATION}</p>
+        <p className="dedication-text">{t.dedication}</p>
         <div className="grow" />
-        <Sticky rotate={-2.2}>with all my love</Sticky>
+        <Sticky rotate={-2.2}>{t.withAllMyLove}</Sticky>
       </div>
     </Sheet>
   );
@@ -192,12 +194,15 @@ export const Dedication = forwardRef<HTMLDivElement>(function Dedication(_, ref)
 
 export const Contents = forwardRef<HTMLDivElement, { half: 0 | 1 }>(
   function Contents({ half }, ref) {
+    const { locale, t } = useLocale();
     const groups = half === 0 ? SECTIONS.slice(0, 2) : SECTIONS.slice(2);
 
-    // Los números salen del manifiesto del libro, así nunca se desincronizan.
     const numbered = SECTIONS.map((s) => ({
       s,
-      list: recipesBySection(s.id).map((r) => ({ r, n: PAGE_OF[r.id] })),
+      list: recipesBySection(s.id).map((r) => ({
+        r: localizeRecipe(r, locale),
+        n: PAGE_OF[r.id],
+      })),
     }));
 
     return (
@@ -205,12 +210,12 @@ export const Contents = forwardRef<HTMLDivElement, { half: 0 | 1 }>(
         <div className="inner reveal">
           {half === 0 ? (
             <>
-              <p className="eyebrow">Contents</p>
+              <p className="eyebrow">{t.contents}</p>
               <h2
                 className="display"
                 style={{ fontSize: "var(--t-h3)", margin: "6px 0 9px" }}
               >
-                What&apos;s inside
+                {t.whatsInside}
               </h2>
               <div className="drip" style={{ width: "100%", marginBottom: 11 }} />
             </>
@@ -224,7 +229,7 @@ export const Contents = forwardRef<HTMLDivElement, { half: 0 | 1 }>(
               .map(({ s, list }) => (
                 <div className="toc-group" key={s.id}>
                   <div className="toc-head">
-                    <b>{s.title}</b>
+                    <b>{t.sections[s.id].title}</b>
                     <i />
                   </div>
                   <ul className="toc">
@@ -245,7 +250,7 @@ export const Contents = forwardRef<HTMLDivElement, { half: 0 | 1 }>(
 
           {half === 1 && (
             <p className="hand" style={{ fontSize: 17 }}>
-              …and at the back, the weekly menus.
+              {t.weeklyMenusNote}
             </p>
           )}
         </div>
@@ -258,7 +263,8 @@ export const Contents = forwardRef<HTMLDivElement, { half: 0 | 1 }>(
 
 export const SectionDivider = forwardRef<HTMLDivElement, { id: SectionId; index: number }>(
   function SectionDivider({ id, index }, ref) {
-    const s = SECTIONS.find((x) => x.id === id)!;
+    const { t } = useLocale();
+    const s = t.sections[id];
     const count = recipesBySection(id).length;
 
     return (
@@ -284,7 +290,7 @@ export const SectionDivider = forwardRef<HTMLDivElement, { id: SectionId; index:
             className="script"
             style={{ fontSize: 30, marginTop: 18, color: "var(--gold)" }}
           >
-            {count} {count === 1 ? "recipe" : "recipes"}
+            {count} {count === 1 ? t.recipe : t.recipes}
           </p>
         </div>
       </Sheet>
@@ -296,12 +302,13 @@ export const SectionDivider = forwardRef<HTMLDivElement, { id: SectionId; index:
 
 export const RecipePage = forwardRef<HTMLDivElement, { recipe: Recipe; pageNo: number }>(
   function RecipePage({ recipe, pageNo }, ref) {
-    const section = SECTIONS.find((s) => s.id === recipe.section)!;
+    const { locale, t } = useLocale();
+    const r = localizeRecipe(recipe, locale);
     const tone = TAB_TONE[recipe.section];
 
     return (
       <Sheet ref={ref} className="paper">
-        <span className={`tab-label ${tone}`}>{section.title}</span>
+        <span className={`tab-label ${tone}`}>{t.sections[recipe.section].title}</span>
 
         <div className="inner reveal recipe-sheet">
           <div
@@ -319,12 +326,12 @@ export const RecipePage = forwardRef<HTMLDivElement, { recipe: Recipe; pageNo: n
             className="display"
             style={{ fontSize: "var(--t-h3)", margin: "0 0 10px", maxWidth: "18ch" }}
           >
-            {recipe.title}
+            {r.title}
           </h2>
 
-          {recipe.meta && (
+          {r.meta && (
             <div className="meta-row sep">
-              {recipe.meta.map((m) => (
+              {r.meta.map((m) => (
                 <div className="meta" key={m.label}>
                   <span>
                     <Icon name={m.icon} />
@@ -341,12 +348,12 @@ export const RecipePage = forwardRef<HTMLDivElement, { recipe: Recipe; pageNo: n
           <hr className="rule sep" />
 
           <div>
-            {recipe.ingredients.map((g, i) => (
+            {r.ingredients.map((g, i) => (
               <div className="ing-group" key={g.label ?? i}>
                 {g.label ? (
                   <p className="ing-label">{g.label}</p>
                 ) : (
-                  <p className="ing-label">Ingredients</p>
+                  <p className="ing-label">{t.ingredients}</p>
                 )}
                 <IngredientItems items={g.items} cols={g.items.length > 3} />
               </div>
@@ -356,19 +363,19 @@ export const RecipePage = forwardRef<HTMLDivElement, { recipe: Recipe; pageNo: n
           <p className="fleuron sep">✦</p>
 
           <ol className="steps">
-            {recipe.steps.map((s) => (
+            {r.steps.map((s) => (
               <li key={s}>{s}</li>
             ))}
           </ol>
 
-          {recipe.note && (
+          {r.note && (
             <>
               <div className="grow" />
-              <Sticky>{recipe.note}</Sticky>
+              <Sticky>{r.note}</Sticky>
             </>
           )}
 
-          {recipe.scribbles?.map((s, i) => (
+          {r.scribbles?.map((s, i) => (
             <Scribble
               key={`${s.text}-${i}`}
               variant={s.variant}
@@ -379,7 +386,7 @@ export const RecipePage = forwardRef<HTMLDivElement, { recipe: Recipe; pageNo: n
             </Scribble>
           ))}
 
-          {!recipe.note && <div className="grow" />}
+          {!r.note && <div className="grow" />}
         </div>
 
         <span className="page-no">{pageNo}</span>
@@ -391,6 +398,7 @@ export const RecipePage = forwardRef<HTMLDivElement, { recipe: Recipe; pageNo: n
 /* ──────────────────── separador de menús ──────────────────── */
 
 export const MenuDivider = forwardRef<HTMLDivElement>(function MenuDivider(_, ref) {
+  const { t } = useLocale();
   return (
     <Sheet ref={ref} className="gold-frame">
       <div className="menu-open">
@@ -405,21 +413,21 @@ export const MenuDivider = forwardRef<HTMLDivElement>(function MenuDivider(_, re
         />
         <article className="menu-open-note" aria-label="Handwritten note">
           <Scribble variant="marker" rotate={-1.8}>
-            Remember this isn&apos;t a diet, Macaroni — it&apos;s just eating a little healthier.
+            {t.macaroni}
           </Scribble>
         </article>
         <div className="menu-open-copy">
           <p className="eyebrow gold" style={{ letterSpacing: "0.4em" }}>
-            Chapter six
+            {t.chapterSix}
           </p>
           <h2
             className="display shimmer"
             style={{ fontSize: "var(--t-h2)", margin: "8px 0 0" }}
           >
-            Weekly menus
+            {t.weeklyMenus}
           </h2>
           <p className="body" style={{ color: "#dfb6b2cc", marginTop: 8, maxWidth: "26ch" }}>
-            Pinned to the fridge — not a photocopy of the clipboard.
+            {t.menusBlurb}
           </p>
         </div>
       </div>
@@ -433,12 +441,15 @@ export const MealCardsPage = forwardRef<
   HTMLDivElement,
   { cards: MealCard[]; reminder?: boolean }
 >(function MealCardsPage({ cards, reminder }, ref) {
+    const { locale, t } = useLocale();
     return (
       <Sheet ref={ref} className="paper">
         <div className="inner reveal menu-page">
-          <p className="eyebrow">This week</p>
+          <p className="eyebrow">{t.thisWeek}</p>
           <div className="menu-board">
-            {cards.map((c, i) => (
+            {cards.map((raw, i) => {
+              const c = localizeMeal(raw, locale);
+              return (
               <article
                 className={`clip clip-${c.tone} ${i % 2 === 0 ? "polaroid" : "split"}`}
                 key={c.id}
@@ -451,7 +462,7 @@ export const MealCardsPage = forwardRef<
                 />
                 <div className="clip-body">
                   <h3>
-                    {c.kind} #{c.number}
+                    {t.mealKind[c.kind]} #{c.number}
                   </h3>
                   <ul>
                     {c.items.map((it) => (
@@ -465,14 +476,15 @@ export const MealCardsPage = forwardRef<
                   )}
                 </div>
               </article>
-            ))}
+              );
+            })}
           </div>
           <div className="grow" />
           {reminder && (
             <Sticky rotate={-2.6} className="reminder">
-              Toast the walnuts
+              {t.walnutLine1}
               <br />
-              5 min first. Changes everything.
+              {t.walnutLine2}
             </Sticky>
           )}
         </div>
@@ -484,6 +496,7 @@ export const MealCardsPage = forwardRef<
 /* ─────────────────────── contraportada ─────────────────────── */
 
 export const CoverBack = forwardRef<HTMLDivElement>(function CoverBack(_, ref) {
+  const { t } = useLocale();
   return (
     <Sheet ref={ref} density="hard">
       <div
@@ -502,7 +515,7 @@ export const CoverBack = forwardRef<HTMLDivElement>(function CoverBack(_, ref) {
       >
         <div className="drip" style={{ width: "52%", marginBottom: 20 }} />
         <p className="script" style={{ fontSize: "clamp(36px, 5.4vw, 56px)" }}>
-          Thank you
+          {t.thankYou}
         </p>
         <p
           className="display"
@@ -517,7 +530,7 @@ export const CoverBack = forwardRef<HTMLDivElement>(function CoverBack(_, ref) {
           CLAUDIA&apos;S RECIPES
         </p>
         <p className="hand" style={{ fontSize: 17, marginTop: 14 }}>
-          made at home, slowly
+          {t.madeAtHome}
         </p>
       </div>
     </Sheet>
@@ -527,6 +540,8 @@ export const CoverBack = forwardRef<HTMLDivElement>(function CoverBack(_, ref) {
 /* Las páginas decorativas del cuaderno ilustrado se mantienen como
    apertura del capítulo de dulces. */
 export const WatercolorPage = forwardRef<HTMLDivElement>(function WatercolorPage(_, ref) {
+  const { t } = useLocale();
+  const [sweetA, sweetB] = t.somethingSweet.split("\n");
   return (
     <Sheet ref={ref}>
       <div
@@ -539,15 +554,15 @@ export const WatercolorPage = forwardRef<HTMLDivElement>(function WatercolorPage
         }}
       >
         <p className="eyebrow" style={{ color: "var(--wine)" }}>
-          From the home notebook
+          {t.fromNotebook}
         </p>
         <h2
           className="script"
           style={{ fontSize: "clamp(30px, 4.6vw, 50px)", margin: "8px 0 0" }}
         >
-          Something
+          {sweetA}
           <br />
-          sweet
+          {sweetB}
         </h2>
         <div className="drip" style={{ width: "56%", margin: "12px 0 0" }} />
       </div>

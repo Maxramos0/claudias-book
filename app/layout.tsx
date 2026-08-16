@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Allura, Caveat, Fraunces, Kalam, Outfit, Permanent_Marker } from "next/font/google";
+import { Providers } from "@/components/Providers";
 import "./globals.css";
 
 const allura = Allura({
@@ -66,7 +67,7 @@ export default function RootLayout({
       <body
         className={`${allura.variable} ${fraunces.variable} ${caveat.variable} ${outfit.variable} ${kalam.variable} ${marker.variable}`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

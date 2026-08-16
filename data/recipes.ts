@@ -1,7 +1,7 @@
 /**
- * Transcripción del cuaderno de Claudia.
- * Los textos se conservan tal cual están escritos a mano (en inglés);
- * lo único que se añade son los tiempos que la propia receta menciona.
+ * Transcription of Claudia's notebook.
+ * English is the source of truth; Spanish lives in recipes-es.ts.
+ * Times are only those the recipe itself mentions.
  */
 
 export type IngredientGroup = {
@@ -86,7 +86,7 @@ export const RECIPES: Recipe[] = [
           "1 egg",
           "2 potatoes",
           "2–3 carrots",
-          "1 can cr. of tomato",
+          "1 can cream of tomato",
           "Cracker crumbs, to taste",
           "Cheese, shredded, to taste",
         ],
@@ -98,7 +98,7 @@ export const RECIPES: Recipe[] = [
       "Spread cheese on top.",
       'Add remaining beef on top and "seal" shut.',
       "Chop vegetables and spread around.",
-      "Pour over cr. of tomato and bake for 1 hour.",
+      "Pour over cream of tomato and bake for 1 hour.",
     ],
     scribbles: [{ text: "seal the edges!!", rotate: -4 }],
   },
@@ -115,9 +115,9 @@ export const RECIPES: Recipe[] = [
         label: "Sauce",
         items: [
           "½ liter pineapple juice",
-          "1 small bottle bbq sauce",
+          "1 small bottle BBQ sauce",
           "3–4 lemons",
-          "¼ bottle italian dressing",
+          "¼ bottle Italian dressing",
         ],
       },
     ],
@@ -130,14 +130,14 @@ export const RECIPES: Recipe[] = [
   },
   {
     id: "chicken-fettucini-alfredo",
-    title: "Chicken Fettucini Alfredo",
+    title: "Chicken Fettuccine Alfredo",
     section: "mains",
     ingredients: [
       {
         items: [
           "Chicken breasts",
           "1 onion",
-          "1 bag fettucini noodles",
+          "1 bag fettuccine noodles",
           "Parsley flakes, to taste",
         ],
       },
@@ -160,7 +160,7 @@ export const RECIPES: Recipe[] = [
   },
   {
     id: "pollo-mexicana",
-    title: "Pollo Mexicana",
+    title: "Mexican Chicken",
     section: "mains",
     ingredients: [
       {
@@ -201,7 +201,7 @@ export const RECIPES: Recipe[] = [
         items: [
           "1 box lasagna noodles",
           "1 kg ground beef",
-          "1 small box tomato sauce/puré",
+          "1 small box tomato sauce/puree",
         ],
       },
       {
@@ -231,7 +231,7 @@ export const RECIPES: Recipe[] = [
       {
         items: [
           "1 kg shrimp",
-          "2 small boxes tomato sauce/puré",
+          "2 small boxes tomato sauce/puree",
           "1 liter tomato juice",
           "1 onion",
           "1 jalapeño",
@@ -282,7 +282,7 @@ export const RECIPES: Recipe[] = [
       {
         label: "Sauce",
         items: [
-          "2 cans cr. of mushroom & chicken",
+          "2 cans cream of mushroom & chicken",
           "1 cup cream",
           "1 tsp vinegar",
           "1 can corn",
@@ -304,7 +304,7 @@ export const RECIPES: Recipe[] = [
     ingredients: [
       {
         items: [
-          "Tilapia fish filets",
+          "Tilapia fillets",
           "2 cups flour",
           "1 tsp salt",
           "1 tsp pepper",
@@ -337,8 +337,8 @@ export const RECIPES: Recipe[] = [
           "3 mangos",
           "2 cucumbers",
           "2 cups tomato juice",
-          "Salsa inglesa, to taste",
-          "Jugo maggi, to taste",
+          "Worcestershire sauce, to taste",
+          "Maggi seasoning, to taste",
         ],
       },
     ],
@@ -352,12 +352,12 @@ export const RECIPES: Recipe[] = [
     ingredients: [
       {
         items: [
-          "1 kg gr. beef",
+          "1 kg ground beef",
           "½ onion",
           "2 carrots",
           "1 can peas",
           "1 can beef broth",
-          "1 small box tomato puré",
+          "1 small box tomato puree",
           "3 potatoes",
           "Milk, to taste",
           "Butter, to taste",
@@ -366,7 +366,7 @@ export const RECIPES: Recipe[] = [
     ],
     steps: [
       "Chop vegetables and cook beef.",
-      "Mix with peas, broth and puré.",
+      "Mix with peas, broth and puree.",
       "Cook potatoes and mash with milk and butter.",
       "Spread beef on bottom of casserole dish, top with potatoes and bake for 20–30 min.",
     ],
@@ -377,7 +377,7 @@ export const RECIPES: Recipe[] = [
   /* ─────────────────────────── sopas ─────────────────────────── */
   {
     id: "sopa-toscana",
-    title: "Sopa Toscana",
+    title: "Tuscan Soup",
     section: "soups",
     ingredients: [
       {
@@ -387,7 +387,7 @@ export const RECIPES: Recipe[] = [
           "1 sausage",
           "1 pack bacon",
           "2 cloves garlic",
-          '2 packs "sazón goya de pollo"',
+          '2 packs Goya chicken seasoning',
           "2 cups cream",
           "1 onion",
           "1 bunch spinach",
@@ -423,7 +423,7 @@ export const RECIPES: Recipe[] = [
           "3 liters water",
           "1 liter tomato juice",
           "2 cans corn",
-          "2 tomatos",
+          "2 tomatoes",
           "3 jalapeños",
           "1 onion",
           "2 cloves garlic",
@@ -433,7 +433,7 @@ export const RECIPES: Recipe[] = [
         label: "Seasonings",
         items: [
           "3 bay leaves",
-          "1 tsp comino",
+          "1 tsp cumin",
           "1 tsp salt",
           "1 tsp chili powder",
           "2 tsp chicken bouillon",
@@ -443,7 +443,7 @@ export const RECIPES: Recipe[] = [
     ],
     steps: [
       "Chop chicken and add to water.",
-      "Add tomato juice, corn and tomatos.",
+      "Add tomato juice, corn and tomatoes.",
       "Chop onion, jalapeños and garlic and sauté.",
       "Add spices and mix all together.",
     ],
@@ -480,32 +480,32 @@ export const RECIPES: Recipe[] = [
           "1 bunch cilantro",
           "2 onions",
           "½ liter cream",
-          "¾ cup mayonaise",
+          "¾ cup mayonnaise",
           "Salt, to taste",
           "Garlic powder, to taste",
         ],
       },
     ],
     steps: [
-      "Chop onions, 4 jalapeños w/out seeds and 2 with seeds and sauté.",
+      "Chop onions, 4 jalapeños without seeds and 2 with seeds and sauté.",
       "Add remaining ingredients to a blender.",
       "Mix all together and heat up once on stove.",
     ],
   },
   {
     id: "avacado-cream-sauce",
-    title: "Avacado Cream Sauce",
+    title: "Avocado Cream Sauce",
     section: "sauces",
     ingredients: [
       {
         items: [
-          "1 avacado",
+          "1 avocado",
           "1 bunch cilantro",
           "1 jalapeño",
           "2 cloves garlic",
           "2–3 lemons",
-          "1 cup plain yoghurt",
-          "3 tbsp veg. oil",
+          "1 cup plain yogurt",
+          "3 tbsp vegetable oil",
           "3 tbsp water",
           "Salt, to taste",
         ],
@@ -522,7 +522,7 @@ export const RECIPES: Recipe[] = [
         items: [
           "¾ cup honey",
           "3 tbsp soy sauce",
-          "½ tsp gr. ginger",
+          "½ tsp ground ginger",
           "3 cloves garlic",
           "½ tsp chili flakes",
           "⅓ cup water",
@@ -542,7 +542,7 @@ export const RECIPES: Recipe[] = [
     ingredients: [
       {
         items: [
-          "2 bunches romain lettuce",
+          "2 bunches romaine lettuce",
           "1 box strawberries",
           "½ cup almonds",
           "¼ red onion",
@@ -551,7 +551,7 @@ export const RECIPES: Recipe[] = [
       },
       {
         label: "Sauce",
-        items: ["2 tbsp vinegar", "⅓ cup sugar", "½ cup mayonaise"],
+        items: ["2 tbsp vinegar", "⅓ cup sugar", "½ cup mayonnaise"],
       },
     ],
     steps: ["Mix salad ingredients together.", "Mix sauce and pour over."],
@@ -567,7 +567,7 @@ export const RECIPES: Recipe[] = [
           "1 pack bacon",
           "1 cup sour cream",
           "1 cup cheese, shredded",
-          "3 tbsp mayonaise",
+          "3 tbsp mayonnaise",
           "1 cup cream",
           "Salt, to taste",
           "Pepper, to taste",
@@ -593,7 +593,7 @@ export const RECIPES: Recipe[] = [
           "2 eggs",
           "1 cup sugar",
           "1½ cups flour",
-          "1 tsp b. soda",
+          "1 tsp baking soda",
           "4 bananas",
           "1 tsp salt",
         ],
@@ -612,16 +612,16 @@ export const RECIPES: Recipe[] = [
         items: [
           "1 cup flour",
           "1 tbsp sugar",
-          "2 tsp b. powder",
+          "2 tsp baking powder",
           "¼ tsp salt",
           "1 egg",
           "1 cup milk",
-          "2 tbsp veg. oil",
+          "2 tbsp vegetable oil",
         ],
       },
     ],
     steps: ["Mix all together."],
-    note: "Makes apprx. 8 waffles.",
+    note: "Makes approx. 8 waffles.",
     scribbles: [{ text: "don't overmix", rotate: 1.8 }],
   },
   {
@@ -633,14 +633,14 @@ export const RECIPES: Recipe[] = [
       {
         items: [
           "4 cups carrots, shredded",
-          "1½ cups veg. oil",
+          "1½ cups vegetable oil",
           "1 can pineapple cubes",
           "2 cups sugar",
           "3 cups flour",
           "4 eggs",
-          "1 tsp b. soda",
+          "1 tsp baking soda",
           "1 tsp cinnamon",
-          "¼ salt",
+          "¼ tsp salt",
         ],
       },
     ],
@@ -680,7 +680,7 @@ export const RECIPES: Recipe[] = [
           "1¼ cups flour",
           "1 tbsp sugar",
           "¼ tsp cinnamon",
-          "1 tbsp b. powder",
+          "1 tbsp baking powder",
           "¼ tsp salt",
           "2 eggs",
           "1 cup milk",
@@ -691,7 +691,7 @@ export const RECIPES: Recipe[] = [
       },
     ],
     steps: ["Melt butter and mix all together."],
-    note: "Makes apprx. 10 pancakes.",
+    note: "Makes approx. 10 pancakes.",
     scribbles: [{ text: "to taste — chips optional", rotate: -2.6 }],
   },
   {
@@ -709,7 +709,7 @@ export const RECIPES: Recipe[] = [
           "4 cups oats",
           "2 cups flour",
           "1½ cups brown sugar",
-          "1 tsp b. powder",
+          "1 tsp baking powder",
           "1½ cups butter",
         ],
       },
@@ -720,7 +720,7 @@ export const RECIPES: Recipe[] = [
           "2 cups water",
           "7 lemons",
           "5 tsp brown sugar",
-          "1 tsp b. soda",
+          "1 tsp baking soda",
         ],
       },
     ],
@@ -744,7 +744,7 @@ export const RECIPES: Recipe[] = [
           "½ cup sugar",
           "1 cup chocolate chips",
           "1 tsp vanilla",
-          "1 tsp b. soda",
+          "1 tsp baking soda",
           "1 tsp salt",
           "2¼ cups flour",
         ],
@@ -775,10 +775,10 @@ export const MEAL_CARDS: MealCard[] = [
     tone: "amber",
     image: "/images/menu-breakfast.png",
     items: [
-      "Egg sandwich w/ 1 strip bacon",
-      "1 tsp mayonaise",
+      "Egg sandwich with 1 strip bacon",
+      "1 tsp mayonnaise",
       "Fruit — 1 banana, 1 handful melon, 1 handful papaya",
-      "1 small bowl yoghurt w/ honey, granola, sugar",
+      "1 small bowl yogurt with honey, granola, sugar",
     ],
   },
   {
@@ -788,9 +788,9 @@ export const MEAL_CARDS: MealCard[] = [
     tone: "amber",
     image: "/images/menu-breakfast.png",
     items: [
-      "Sandwich w/ bistec, chicken, tuna or ham",
-      "1 tsp mayonaise",
-      "½ avacado",
+      "Sandwich with steak, chicken, tuna or ham",
+      "1 tsp mayonnaise",
+      "½ avocado",
       "Small side of mushrooms",
       "Fruit same as #1",
     ],
@@ -804,10 +804,10 @@ export const MEAL_CARDS: MealCard[] = [
     aside:
       "Remember this isn't a diet, Macaroni — it's just eating a little healthier.",
     items: [
-      "1 handful beef, fried in veg. oil",
+      "1 handful beef, fried in vegetable oil",
       "1 cup steamed veggies",
       "1½ cup beans",
-      "½ avacado",
+      "½ avocado",
       "3 corn tortillas",
     ],
   },
@@ -818,10 +818,10 @@ export const MEAL_CARDS: MealCard[] = [
     tone: "lime",
     image: "/images/menu-lunch.png",
     items: [
-      "1½ filets of fish, fried in veg. oil",
+      "1½ fillets of fish, fried in vegetable oil",
       "1 cup of broccoli",
       "1 cup of other veggie",
-      "½ avacado",
+      "½ avocado",
       "¼ cup rice",
     ],
   },
@@ -832,11 +832,11 @@ export const MEAL_CARDS: MealCard[] = [
     tone: "lime",
     image: "/images/menu-lunch.png",
     items: [
-      "1 handful chicken, fried in veg. oil",
+      "1 handful chicken, fried in vegetable oil",
       "1 cup steamed veggies",
-      "½ potatoe, fried in veg. oil",
-      "½ bell pepper, fried in veg. oil",
-      "½ avacado",
+      "½ potato, fried in vegetable oil",
+      "½ bell pepper, fried in vegetable oil",
+      "½ avocado",
       "2 corn tortillas",
     ],
   },
@@ -850,7 +850,7 @@ export const MEAL_CARDS: MealCard[] = [
       "1 handful chicken, cooked & shredded",
       "3 tostadas",
       "3 tbsp cream (1 per tostada)",
-      "Salsa (opt.)",
+      "Salsa (optional)",
       "Lettuce",
     ],
   },
@@ -861,12 +861,12 @@ export const MEAL_CARDS: MealCard[] = [
     tone: "sky",
     image: "/images/menu-supper.png",
     items: [
-      "2 filets of pork",
+      "2 pork fillets",
       "1 handful of panela cheese",
       "2 corn tortillas",
-      "½ avacado",
+      "½ avocado",
       "Lettuce & cucumber salad",
-      "Vinagrette or olive oil (opt.)",
+      "Vinaigrette or olive oil (optional)",
       "½ apple",
     ],
   },

@@ -3,6 +3,9 @@
 import HTMLFlipBook from "react-pageflip";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CHAPTER_JUMPS, PAGES, PAGE_OF, labelFor } from "@/data/book";
+import type { Copy } from "@/data/copy";
+import type { SectionId } from "@/data/recipes";
+import { useLocale, type Locale } from "@/lib/locale";
 import {
   Contents,
   CoverBack,
@@ -35,6 +38,28 @@ const SPRINKLES = [
   { top: "92%", left: "16%", s: 7, c: "#e4c59a", d: 17, delay: 0.7, kind: "pill" },
 ];
 
+function jumpLabel(id: string, t: Copy) {
+  if (id === "toc") return t.jumps.toc;
+  if (id === "menus") return t.jumps.menus;
+  return t.sections[id as SectionId].title;
+}
+
+function LangToggle() {
+  const { locale, setLocale, t } = useLocale();
+  const pick = (next: Locale) => () => setLocale(next);
+
+  return (
+    <div className="lang" role="group" aria-label={t.langLabel}>
+      <button type="button" aria-pressed={locale === "en"} onClick={pick("en")}>
+        EN
+      </button>
+      <button type="button" aria-pressed={locale === "es"} onClick={pick("es")}>
+        ES
+      </button>
+    </div>
+  );
+}
+
 function renderPage(p: (typeof PAGES)[number], i: number) {
   switch (p.kind) {
     case "cover-front":
@@ -64,6 +89,7 @@ export function BookInner() {
   const bookRef = useRef<HTMLFlipBook>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(0);
+  const { locale, t } = useLocale();
 
   const flip = useCallback((dir: "prev" | "next") => {
     const api = bookRef.current?.pageFlip();
@@ -121,7 +147,7 @@ export function BookInner() {
     return () => window.removeEventListener("keydown", onKey);
   }, [flip, goTo]);
 
-  const current = labelFor(PAGES[page] ?? PAGES[0]);
+  const current = labelFor(PAGES[page] ?? PAGES[0], locale);
   const progress = (page / (PAGES.length - 1)) * 100;
 
   // El capítulo activo es el último salto que ya hemos pasado.
@@ -157,15 +183,18 @@ export function BookInner() {
         <span className="tip tip-mouse">
           <kbd>←</kbd>
           <kbd>→</kbd>
-          drag the corner
+          {t.dragCorner}
         </span>
-        <span className="tip tip-touch">swipe the page</span>
+        <span className="tip tip-touch">{t.swipePage}</span>
+        <LangToggle />
       </header>
 
       <div className="book-scene">
         <div className="book-wrap" ref={wrapRef}>
           <HTMLFlipBook
             ref={bookRef}
+            key={locale}
+            startPage={page}
             width={470}
             height={660}
             size="stretch"
@@ -195,13 +224,13 @@ export function BookInner() {
         </div>
       </div>
 
-      <nav className="controls" aria-label="Book navigation">
+      <nav className="controls" aria-label={t.nav}>
         <button
           type="button"
           className="nav-btn"
           disabled={page <= 0}
           onClick={() => flip("prev")}
-          aria-label="Previous page"
+          aria-label={t.prev}
         >
           <svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true">
             <path
@@ -222,9 +251,9 @@ export function BookInner() {
         </span>
 
         <label className="jump">
-          <span className="sr-only">Jump to chapter</span>
+          <span className="sr-only">{t.jump}</span>
           <select
-            aria-label="Jump to chapter"
+            aria-label={t.jump}
             value={activeJump?.id ?? ""}
             onChange={(e) => {
               const next = CHAPTER_JUMPS.find((j) => j.id === e.target.value);
@@ -232,11 +261,11 @@ export function BookInner() {
             }}
           >
             <option value="" disabled>
-              Chapter
+              {t.chapter}
             </option>
             {CHAPTER_JUMPS.filter((j) => j.page >= 0).map((j) => (
               <option key={j.id} value={j.id}>
-                {j.label}
+                {jumpLabel(j.id, t)}
               </option>
             ))}
           </select>
@@ -250,7 +279,7 @@ export function BookInner() {
               aria-current={activeJump?.id === j.id}
               onClick={() => goTo(j.page)}
             >
-              {j.label}
+              {jumpLabel(j.id, t)}
             </button>
           ))}
         </span>
@@ -260,7 +289,7 @@ export function BookInner() {
           className="nav-btn"
           disabled={page >= PAGES.length - 1}
           onClick={() => flip("next")}
-          aria-label="Next page"
+          aria-label={t.next}
         >
           <svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true">
             <path

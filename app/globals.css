@@ -235,6 +235,37 @@ body {
   padding-right: 9px;
 }
 
+.lang {
+  display: flex;
+  margin-left: auto;
+  padding: 2px;
+  gap: 1px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--stroke);
+  box-shadow: 0 1.5px 0 var(--paper-warm);
+}
+
+.lang button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  min-width: 34px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.lang button[aria-pressed="true"] {
+  background: var(--wine);
+  color: #fff;
+}
+
 .masthead .tip-touch {
   display: none;
 }
@@ -1898,6 +1929,10 @@ html.is-touch .masthead kbd {
   .masthead .tip,
   .masthead .sep {
     display: none;
+  }
+
+  .masthead .lang {
+    margin-left: auto;
   }
 
   .masthead .mark {

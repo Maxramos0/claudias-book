@@ -33,3 +33,4 @@ npm-debug.log*
 # original notebook photos (not for the public site)
 /RECIPIES/
 /recipes/
+.vercel

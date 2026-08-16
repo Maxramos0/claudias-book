@@ -60,8 +60,10 @@ function IngredientItems({ items, cols }: { items: string[]; cols: boolean }) {
       {items.map((it) => (
         <li key={it}>
           <label
+            onMouseDown={(e) => e.stopPropagation()}
             onPointerDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
             <input type="checkbox" />
             <span>{it}</span>

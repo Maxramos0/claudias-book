@@ -62,6 +62,7 @@ function renderPage(p: (typeof PAGES)[number], i: number) {
 
 export function BookInner() {
   const bookRef = useRef<HTMLFlipBook>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(0);
 
   const flip = useCallback((dir: "prev" | "next") => {
@@ -73,6 +74,24 @@ export function BookInner() {
 
   const goTo = useCallback((i: number) => {
     bookRef.current?.pageFlip()?.flip(i);
+  }, []);
+
+  useEffect(() => {
+    const root = wrapRef.current;
+    if (!root) return;
+
+    const blockFlip = (e: Event) => {
+      const t = e.target as HTMLElement | null;
+      if (t?.closest("a, button, input, label, select, textarea")) {
+        e.stopPropagation();
+      }
+    };
+
+    const types = ["mousedown", "mouseup", "click", "touchstart", "touchend", "pointerdown", "pointerup"] as const;
+    for (const type of types) root.addEventListener(type, blockFlip, true);
+    return () => {
+      for (const type of types) root.removeEventListener(type, blockFlip, true);
+    };
   }, []);
 
   useEffect(() => {
@@ -144,7 +163,7 @@ export function BookInner() {
       </header>
 
       <div className="book-scene">
-        <div className="book-wrap">
+        <div className="book-wrap" ref={wrapRef}>
           <HTMLFlipBook
             ref={bookRef}
             width={470}
@@ -165,6 +184,7 @@ export function BookInner() {
             showPageCorners
             swipeDistance={26}
             useMouseEvents
+            disableFlipByClick
             mobileScrollSupport
             className="the-book"
             onFlip={(e) => setPage(e.data)}
